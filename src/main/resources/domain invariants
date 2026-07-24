@@ -1,0 +1,8 @@
+TODO write acceptance tests with Cucumber
+Each squad has to have exactly 11 players.
+Each squad has to have exactly 1 goalkeeper.
+Each squad has to pick players that match the selected formation.
+
+Formations consists of 10 slots split among 3 positions.
+
+Injured or suspended players cannot be selected.
