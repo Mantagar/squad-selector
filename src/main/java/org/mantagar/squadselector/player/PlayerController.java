@@ -1,6 +1,7 @@
 package org.mantagar.squadselector.player;
 
 import lombok.RequiredArgsConstructor;
+import org.mantagar.squadselector.player.dto.CreatePlayerRequest;
 import org.mantagar.squadselector.player.model.Player;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/player")
+@RequestMapping("/players")
 @RequiredArgsConstructor
 public class PlayerController {
 
@@ -25,14 +26,15 @@ public class PlayerController {
     }
 
     @PatchMapping("/{id}")
-    public Player patchPlayer(@RequestBody Player player, @PathVariable long id) {
-        return playerService.patchPlayer(id, player);
+    public Player patchPlayer(
+            @RequestBody CreatePlayerRequest playerRequest, @PathVariable long id) {
+        return playerService.patchPlayer(id, playerRequest);
     }
 
     // TODO idempotency key
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Player createPlayer(@RequestBody Player player) {
-        return playerService.createPlayer(player);
+    public Player createPlayer(@RequestBody CreatePlayerRequest playerRequest) {
+        return playerService.createPlayer(playerRequest);
     }
 }

@@ -1,6 +1,7 @@
 package org.mantagar.squadselector.player;
 
 import lombok.RequiredArgsConstructor;
+import org.mantagar.squadselector.player.dto.CreatePlayerRequest;
 import org.mantagar.squadselector.player.exception.PlayerNotFoundException;
 import org.mantagar.squadselector.player.model.Player;
 import org.springframework.stereotype.Service;
@@ -18,19 +19,25 @@ public class PlayerService {
     }
 
     @Transactional
-    public Player patchPlayer(long id, Player modified) {
+    public Player patchPlayer(long id, CreatePlayerRequest playerRequest) {
         Player player = playerRepository.findById(id).orElse(null);
         if (player == null)
             throw new PlayerNotFoundException("Player with id=%s not found".formatted(id));
-        if (modified.getName() != null) player.setName(modified.getName());
-        if (modified.getSurname() != null) player.setSurname(modified.getSurname());
-        if (modified.getPosition() != null) player.setPosition(modified.getPosition());
-        if (modified.getAvailability() != null) player.setAvailability(modified.getAvailability());
+        if (playerRequest.name() != null) player.setName(playerRequest.name());
+        if (playerRequest.surname() != null) player.setSurname(playerRequest.surname());
+        if (playerRequest.position() != null) player.setPosition(playerRequest.position());
+        if (playerRequest.availability() != null)
+            player.setAvailability(playerRequest.availability());
         return playerRepository.save(player);
     }
 
     @Transactional
-    public Player createPlayer(Player player) {
+    public Player createPlayer(CreatePlayerRequest playerRequest) {
+        Player player = new Player();
+        player.setName(playerRequest.name());
+        player.setSurname(playerRequest.surname());
+        player.setPosition(playerRequest.position());
+        player.setAvailability(playerRequest.availability());
         return playerRepository.save(player);
     }
 }

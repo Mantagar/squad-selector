@@ -15,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mantagar.squadselector.player.dto.CreatePlayerRequest;
 import org.mantagar.squadselector.player.exception.PlayerNotFoundException;
 import org.mantagar.squadselector.player.model.Availability;
 import org.mantagar.squadselector.player.model.Player;
@@ -36,7 +37,7 @@ class PlayerControllerTest {
     @Autowired private ObjectMapper objectMapper;
 
     @Test
-    @DisplayName("GET /player should return all players")
+    @DisplayName("GET /players should return all players")
     void getPlayers() throws Exception {
         Player player1 = new Player();
         player1.setId(1L);
@@ -54,7 +55,7 @@ class PlayerControllerTest {
 
         when(playerService.getPlayers()).thenReturn(List.of(player1, player2));
 
-        mockMvc.perform(get("/player").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/players").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].id").value(1))
@@ -66,38 +67,38 @@ class PlayerControllerTest {
     }
 
     @Test
-    @DisplayName("POST /player should create a new player and return 201 CREATED")
+    @DisplayName("POST /players should create a new player and return 201 CREATED")
     void createPlayer() throws Exception {
         Player newPlayer = new Player();
         newPlayer.setName("Mike");
         newPlayer.setSurname("Johnson");
-        newPlayer.setPosition(Position.DEFENCE);
+        newPlayer.setPosition(Position.DEFENSE);
         newPlayer.setAvailability(Availability.AVAILABLE);
 
         Player createdPlayer = new Player();
         createdPlayer.setId(1L);
         createdPlayer.setName("Mike");
         createdPlayer.setSurname("Johnson");
-        createdPlayer.setPosition(Position.DEFENCE);
+        createdPlayer.setPosition(Position.DEFENSE);
         createdPlayer.setAvailability(Availability.AVAILABLE);
 
-        when(playerService.createPlayer(any(Player.class))).thenReturn(createdPlayer);
+        when(playerService.createPlayer(any(CreatePlayerRequest.class))).thenReturn(createdPlayer);
 
         mockMvc.perform(
-                        post("/player")
+                        post("/players")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(newPlayer)))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("Mike"))
-                .andExpect(jsonPath("$.position").value("DEFENCE"));
+                .andExpect(jsonPath("$.position").value("DEFENSE"));
 
-        verify(playerService, times(1)).createPlayer(any(Player.class));
+        verify(playerService, times(1)).createPlayer(any(CreatePlayerRequest.class));
     }
 
     @Test
-    @DisplayName("PATCH /player/{id} should update an existing player")
+    @DisplayName("PATCH /players/{id} should update an existing player")
     void patchPlayer_playerExists_updatesPlayer() throws Exception {
         Player updatedPlayer = new Player();
         updatedPlayer.setId(1L);
@@ -106,10 +107,11 @@ class PlayerControllerTest {
         updatedPlayer.setPosition(Position.OFFENSE);
         updatedPlayer.setAvailability(Availability.INJURED);
 
-        when(playerService.patchPlayer(eq(1L), any(Player.class))).thenReturn(updatedPlayer);
+        when(playerService.patchPlayer(eq(1L), any(CreatePlayerRequest.class)))
+                .thenReturn(updatedPlayer);
 
         mockMvc.perform(
-                        patch("/player/1")
+                        patch("/players/1")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("{\"availability\":\"INJURED\"}"))
                 .andExpect(status().isOk())
@@ -118,34 +120,34 @@ class PlayerControllerTest {
                 .andExpect(jsonPath("$.name").value("Michael"))
                 .andExpect(jsonPath("$.availability").value("INJURED"));
 
-        verify(playerService, times(1)).patchPlayer(eq(1L), any(Player.class));
+        verify(playerService, times(1)).patchPlayer(eq(1L), any(CreatePlayerRequest.class));
     }
 
     @Test
-    @DisplayName("PATCH /player/{id} should return 404 when player not found")
+    @DisplayName("PATCH /players/{id} should return 404 when player not found")
     void patchPlayer_playerNotFound_returns404() throws Exception {
         Player patchPlayer = new Player();
         patchPlayer.setName("NonExistent");
 
-        when(playerService.patchPlayer(eq(1L), any(Player.class)))
+        when(playerService.patchPlayer(eq(1L), any(CreatePlayerRequest.class)))
                 .thenThrow(new PlayerNotFoundException("Player with id=1 not found"));
 
         mockMvc.perform(
-                        patch("/player/1")
+                        patch("/players/1")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(patchPlayer)))
                 .andExpect(status().isNotFound());
 
-        verify(playerService, times(1)).patchPlayer(eq(1L), any(Player.class));
+        verify(playerService, times(1)).patchPlayer(eq(1L), any(CreatePlayerRequest.class));
     }
 
     @Test
-    @DisplayName("POST /player should handle invalid input")
+    @DisplayName("POST /players should handle invalid input")
     void createPlayer_invalidInput() throws Exception {
         String invalidJson = "{invalid json}";
 
         mockMvc.perform(
-                        post("/player")
+                        post("/players")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(invalidJson))
                 .andExpect(status().isBadRequest());
