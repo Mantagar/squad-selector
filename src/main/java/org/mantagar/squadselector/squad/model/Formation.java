@@ -3,6 +3,7 @@ package org.mantagar.squadselector.squad.model;
 import jakarta.persistence.Embeddable;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import org.mantagar.squadselector.squad.exception.InvalidFormationSizeException;
 
 @Embeddable
 @Getter
@@ -13,11 +14,29 @@ public final class Formation {
     private final int defense;
 
     public Formation(int offense, int middle, int defense) {
-        if (offense < 1 || middle < 1 || defense < 1)
-            throw new IllegalArgumentException(
-                    "Each position should be occupied by at least 1 player");
+        StringBuilder exceptionMsg = new StringBuilder();
+        if (offense < 1)
+            exceptionMsg
+                    .append("\noffense has to be at least 1 (provided: ")
+                    .append(offense)
+                    .append(")");
+        if (middle < 1)
+            exceptionMsg
+                    .append("\nmiddle has to be at least 1 (provided: ")
+                    .append(middle)
+                    .append(")");
+        if (defense < 1)
+            exceptionMsg
+                    .append("\ndefense has to be at least 1 (provided: ")
+                    .append(defense)
+                    .append(")");
         if (offense + defense + middle != 10)
-            throw new IllegalArgumentException("Combined the formation should equal 10 players");
+            exceptionMsg
+                    .append("\noffense, middle, and defense must be 10 in total (provided: ")
+                    .append(offense + defense + middle)
+                    .append(")");
+        if (!exceptionMsg.isEmpty())
+            throw new InvalidFormationSizeException("Invalid formation:" + exceptionMsg);
         this.offense = offense;
         this.middle = middle;
         this.defense = defense;

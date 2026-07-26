@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler
-    public ResponseEntity<String> handlePlayerNotFound(PlayerNotFoundException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Player not found");
+    public ResponseEntity<String> handlePlayerNotFound(PlayerNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 }

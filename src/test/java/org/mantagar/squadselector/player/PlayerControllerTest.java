@@ -69,11 +69,9 @@ class PlayerControllerTest {
     @Test
     @DisplayName("POST /players should create a new player and return 201 CREATED")
     void createPlayer() throws Exception {
-        Player newPlayer = new Player();
-        newPlayer.setName("Mike");
-        newPlayer.setSurname("Johnson");
-        newPlayer.setPosition(Position.DEFENSE);
-        newPlayer.setAvailability(Availability.AVAILABLE);
+        CreatePlayerRequest newPlayer =
+                new CreatePlayerRequest(
+                        "Mike", "Johnson", Position.DEFENSE, Availability.AVAILABLE);
 
         Player createdPlayer = new Player();
         createdPlayer.setId(1L);
@@ -126,8 +124,9 @@ class PlayerControllerTest {
     @Test
     @DisplayName("PATCH /players/{id} should return 404 when player not found")
     void patchPlayer_playerNotFound_returns404() throws Exception {
-        Player patchPlayer = new Player();
-        patchPlayer.setName("NonExistent");
+        CreatePlayerRequest patchPlayer =
+                new CreatePlayerRequest(
+                        "Mike", "Johnson", Position.DEFENSE, Availability.AVAILABLE);
 
         when(playerService.patchPlayer(eq(1L), any(CreatePlayerRequest.class)))
                 .thenThrow(new PlayerNotFoundException("Player with id=1 not found"));

@@ -1,8 +1,16 @@
 package org.mantagar.squadselector.squad;
 
 import lombok.RequiredArgsConstructor;
+import org.mantagar.squadselector.squad.dto.CreateSquadRequest;
+import org.mantagar.squadselector.squad.exception.InvalidFormationSizeException;
+import org.mantagar.squadselector.squad.exception.InvalidSquadCompositionException;
+import org.mantagar.squadselector.squad.exception.InvalidSquadSizeException;
+import org.mantagar.squadselector.squad.exception.PlayerUnavailableException;
 import org.mantagar.squadselector.squad.model.Squad;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,9 +24,34 @@ public class SquadController {
 
     private final SquadService squadService;
 
+    @GetMapping
+    public Iterable<Squad> getSquads() {
+        return squadService.getSquads();
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Squad postSquad(@RequestBody Squad squad) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Squad createSquad(@RequestBody CreateSquadRequest squadRequest) {
+        return squadService.createSquad(squadRequest);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<String> handleInvalidSquadSize(InvalidSquadSizeException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<String> handleInvalidFormationSize(InvalidFormationSizeException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<String> handleInvalidFormationSize(InvalidSquadCompositionException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<String> handleInvalidFormationSize(PlayerUnavailableException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 }
