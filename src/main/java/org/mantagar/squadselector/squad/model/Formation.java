@@ -1,17 +1,20 @@
 package org.mantagar.squadselector.squad.model;
 
 import jakarta.persistence.Embeddable;
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.mantagar.squadselector.squad.exception.InvalidFormationSizeException;
+import lombok.NoArgsConstructor;
+import org.mantagar.squadselector.squad.exception.InvalidFormationException;
 
 @Embeddable
 @Getter
 @EqualsAndHashCode
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public final class Formation {
-    private final int offense;
-    private final int middle;
-    private final int defense;
+    private int offense;
+    private int middle;
+    private int defense;
 
     public Formation(int offense, int middle, int defense) {
         StringBuilder exceptionMsg = new StringBuilder();
@@ -36,7 +39,7 @@ public final class Formation {
                     .append(offense + defense + middle)
                     .append(")");
         if (!exceptionMsg.isEmpty())
-            throw new InvalidFormationSizeException("Invalid formation:" + exceptionMsg);
+            throw new InvalidFormationException("Invalid formation:" + exceptionMsg);
         this.offense = offense;
         this.middle = middle;
         this.defense = defense;

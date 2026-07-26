@@ -97,7 +97,7 @@ class PlayerControllerTest {
 
     @Test
     @DisplayName("PATCH /players/{id} should update an existing player")
-    void patchPlayer_playerExists_updatesPlayer() throws Exception {
+    void patchPlayer_playerExists() throws Exception {
         Player updatedPlayer = new Player();
         updatedPlayer.setId(1L);
         updatedPlayer.setName("Michael");
@@ -123,7 +123,7 @@ class PlayerControllerTest {
 
     @Test
     @DisplayName("PATCH /players/{id} should return 404 when player not found")
-    void patchPlayer_playerNotFound_returns404() throws Exception {
+    void patchPlayer_playerNotFound() throws Exception {
         CreatePlayerRequest patchPlayer =
                 new CreatePlayerRequest(
                         "Mike", "Johnson", Position.DEFENSE, Availability.AVAILABLE);

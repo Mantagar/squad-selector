@@ -2,7 +2,7 @@ package org.mantagar.squadselector.squad;
 
 import lombok.RequiredArgsConstructor;
 import org.mantagar.squadselector.squad.dto.CreateSquadRequest;
-import org.mantagar.squadselector.squad.exception.InvalidFormationSizeException;
+import org.mantagar.squadselector.squad.exception.InvalidFormationException;
 import org.mantagar.squadselector.squad.exception.InvalidSquadCompositionException;
 import org.mantagar.squadselector.squad.exception.InvalidSquadSizeException;
 import org.mantagar.squadselector.squad.exception.PlayerUnavailableException;
@@ -41,7 +41,7 @@ public class SquadController {
     }
 
     @ExceptionHandler
-    public ResponseEntity<String> handleInvalidFormationSize(InvalidFormationSizeException ex) {
+    public ResponseEntity<String> handleInvalidFormationSize(InvalidFormationException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 

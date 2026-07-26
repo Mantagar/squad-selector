@@ -41,7 +41,10 @@ public class SquadService {
         verifyPlayerIds(players, squadRequest.playerIds());
         verifyPlayerPositions(players, squadRequest.formation());
         verifyPlayerAvailability(players);
-        return null; // createSquad(squadRequest);
+        Squad squad = new Squad();
+        squad.setFormation(squadRequest.formation());
+        squad.setPlayers(players);
+        return squadRepository.save(squad);
     }
 
     private void verifyPlayerAvailability(List<Player> players) {
