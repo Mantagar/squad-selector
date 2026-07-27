@@ -7,6 +7,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.mantagar.squadselector.squad.exception.InvalidFormationException;
 
+/*
+NOTE: theoretically formation could be removed entirely.
+Instead one could rely just on player list and check if
+it is 11 and there is at least 1 player per position.
+Leaving it here as is for now TODO decide its fate
+ */
 @Embeddable
 @Getter
 @EqualsAndHashCode

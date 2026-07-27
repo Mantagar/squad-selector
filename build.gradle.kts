@@ -24,6 +24,13 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webmvc")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.3")
 
+    testImplementation("io.cucumber:cucumber-java:7.34.4")
+    testImplementation("io.cucumber:cucumber-spring:7.34.4")
+    testImplementation("io.cucumber:cucumber-junit-platform-engine:7.34.4")
+    testImplementation("org.junit.platform:junit-platform-suite-api:6.0.3")
+    testRuntimeOnly("org.junit.platform:junit-platform-suite-engine:6.0.3")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:6.0.3")
+
     runtimeOnly("com.h2database:h2")
 
     testImplementation("org.springframework.boot:spring-boot-starter-data-jpa-test")
