@@ -59,7 +59,7 @@ public class SquadService {
                                                         player.getId(),
                                                         player.getAvailability().name())));
         if (!exceptionMsg.isEmpty())
-            throw new PlayerUnavailableException("Players not available: " + exceptionMsg);
+            throw new PlayerUnavailableException("Players not available:" + exceptionMsg);
     }
 
     private void verifyPlayerPositions(List<Player> players, Formation formation) {
@@ -85,8 +85,7 @@ public class SquadService {
                     .append(formation.getDefense())
                     .append(" defense players required");
         if (!exceptionMsg.isEmpty())
-            throw new InvalidSquadCompositionException(
-                    "Invalid squad composition: " + exceptionMsg);
+            throw new InvalidSquadCompositionException("Invalid squad composition:" + exceptionMsg);
     }
 
     private void verifyPlayerIds(List<Player> fetchedPlayers, List<Long> requestedPlayerIds) {
