@@ -39,6 +39,7 @@ public class SquadCreationSteps {
         restTestClient =
                 RestTestClient.bindToServer()
                         .baseUrl("http://localhost:%d/squads".formatted(port))
+                        .defaultHeaders(h -> h.setBasicAuth("testuser", "testpass"))
                         .build();
     }
 
